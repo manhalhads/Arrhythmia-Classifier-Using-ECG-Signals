@@ -1,0 +1,68 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{tabularx}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Deep Learning Approaches for Electrocardiogram (ECG) Arrhythmia Detection: Methodology and Experiment Design\\}
+
+\author{\IEEEauthorblockN{Zobia Hussain}
+\IEEEauthorblockA{\textit{Department of Computer Science} \\
+\textit{National University of Computer and Emerging Sciences}\\
+Lahore, Pakistan \\
+l201085@lhr.nu.edu.pk}
+\and
+\IEEEauthorblockN{Muhammad Waqar}
+\IEEEauthorblockA{\textit{Department of Computer Science} \\
+\textit{National University of Computer and Emerging Sciences}\\
+Lahore, Pakistan \\
+l217729@lhr.nu.edu.pk}
+\and
+\IEEEauthorblockN{Fajar Shakeel}
+\IEEEauthorblockA{\textit{Department of Computer Science} \\
+\textit{National University of Computer and Emerging Sciences}\\
+Lahore, Pakistan \\
+l227805@lhr.nu.edu.pk}
+}
+
+\maketitle
+
+\section{Methodology}
+
+
+In this study, we employed a one-dimensional Convolutional Neural Network (1D CNN) to classify ECG beats from two datasets: the MIT-BIH Arrhythmia Database and the Supraventricular Arrhythmia Database. The model consists of multiple 1D convolutional layers followed by pooling, a fully connected layer, and a softmax output layer. This architecture was chosen because 1D CNNs are highly effective at capturing the morphological features of individual ECG beats (PQRST complexes) while remaining computationally efficient. Hybrid architectures such as CNN-LSTM or CNN-ESN were not used, as the classification task focuses on single-beat morphology rather than long-term sequential patterns, and adding recurrent components would increase complexity without significant benefit.
+The research workflow begins with data acquisition and preprocessing. ECG signals from both databases were first standardized to a uniform sampling frequency, and beats were segmented based on R-peak detection. Each beat was resampled to a fixed length to ensure consistency, and invalid or empty beats were removed. The dataset was then split into training, validation, and testing subsets. Labels were encoded numerically, and class imbalance was addressed through class weighting during training. The model was trained on the preprocessed beats and evaluated on the test set, with the primary goal of achieving accurate beat classification and assessing generalization across both datasets.
+
+
+
+\section{Experimental Design}
+The data from both the MIT-BIH Arrhythmia Database and the Supraventricular Arrhythmia Database were first preprocessed to ensure uniformity for model input. The Supraventricular Database recordings, originally sampled at 128 Hz, were resampled to 360 Hz to match the MIT-BIH Arrhythmia Database, and all corresponding annotations were retained. Each ECG recording was segmented into individual beats using R-peak detection, with each beat encompassing a full PQRST complex. To standardize input length for the neural network, each segmented beat was resampled to 360 points. Invalid beats, such as empty segments or those consisting entirely of zeros, were removed. Additionally, classes with fewer than two samples were excluded to prevent issues during training. The cleaned dataset was then split into training (70\%), validation (15\%), and testing (15\%) sets, with a stratified split to maintain class distribution.
+For model training, we implemented a 1D Convolutional Neural Network (CNN) with two convolutional blocks followed by a fully connected layer and softmax output. The first convolutional block consisted of 32 filters with kernel size 7 and ReLU activation, followed by MaxPooling1D with pool size 2. The second block contained 64 filters with kernel size 5, ReLU activation, and MaxPooling1D. The flattened feature maps were passed through a dense layer with 128 neurons and ReLU activation, with dropout set to 0.3 to reduce overfitting. The output layer used softmax activation with neurons equal to the number of unique beat classes.
+
+
+The model was trained using the Adam optimizer with a learning rate of 1e-4, epsilon 1e-8, and gradient clipping with clipnorm=1.0 to ensure numerical stability. The categorical cross-entropy loss function was used for multi-class classification. To address class imbalance, class weights were computed using the training labels and applied during training to balance the contribution of each class to the loss. The labels were one-hot encoded to match the softmax output of the network. Training was performed for a total of 30 epochs with a batch size of 32, monitoring validation performance to track overfitting.
+For evaluation, the model was assessed on the held-out test set using accuracy, precision, recall, and F1-score as primary metrics. Accuracy served as the main performance indicator, while precision, recall, and F1-score quantified per-class performance and the model’s ability to handle imbalanced classes. This experimental setup, including preprocessing, hyperparameters, optimizer configuration, and class-weighted training, provides a fully repeatable framework to ensure robust and stable model training.
+
+
+
+
+
+ 
+\begin{thebibliography}{00}
+
+
+\end{thebibliography}
+
+\vspace{12pt}
+
+\end{document}
+
